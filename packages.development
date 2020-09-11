@@ -4,14 +4,3 @@ gdbserver
 make        
 net-tools   
 valgrind    
-#make                     
-#netcat-openbsd           
-nodejs                   
-npm                      
-#openmha                  
-#openmha-examples         
-psmisc                   
-rt-tests                 
-#sudo                     
-#valgrind                 
-#xz-utils                 
