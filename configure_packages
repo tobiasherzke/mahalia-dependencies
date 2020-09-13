@@ -1,5 +1,17 @@
 #!/bin/bash -ex
 
+# This script is executed in a chroot environment after all packages have
+# been installed but are not yet configured.  The resulting filesystem
+# after this script has executed is used as the mahalia SD card image.
+
+# global settings:
+HOSTNAME=mahalia
+ROOT_PASSWORD=toor
+
+#################################################
+# Configure all debian packages
+#################################################
+
 # silence locale warnings
 export LC_ALL=C LANGUAGE=C LANG=C
 
@@ -10,7 +22,25 @@ debconf-set-selections /preseed.conf
 # first configuration run will have some errors
 dpkg --configure -a || true
 
-# second configuration run should succeed
+# second configuration run should succeed while /proc is mounted
 mount proc -t proc /proc
 dpkg --configure -a
 umount /proc
+
+#################################################
+# Adjust existing configuration
+#################################################
+
+# Replace file /etc/hosts
+echo "127.0.0.1	localhost $HOSTNAME" >/etc/hosts
+
+# Set root password
+ENCRYPTED_PASSWORD=$(mkpasswd -m sha-512 "$ROOT_PASSWORD")
+chroot_exec usermod -p "${ENCRYPTED_PASSWORD}" root
+
+#################################################
+# Clear all caches
+#################################################
+
+apt-get clean
+rm -r /var/lib/apt/lists
