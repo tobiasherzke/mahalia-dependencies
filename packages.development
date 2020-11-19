@@ -1,6 +1,0 @@
-g++-7
-gdb
-gdbserver
-make
-net-tools
-valgrind
