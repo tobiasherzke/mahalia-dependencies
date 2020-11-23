@@ -39,7 +39,7 @@ echo "127.0.0.1	localhost $HOSTNAME" >/etc/hosts
 
 # Set root password
 ENCRYPTED_PASSWORD=$(mkpasswd -m sha-512 "$ROOT_PASSWORD")
-chroot_exec usermod -p "${ENCRYPTED_PASSWORD}" root
+usermod -p "${ENCRYPTED_PASSWORD}" root
 
 # Allow ssh for root with password
 sed -i -e 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
