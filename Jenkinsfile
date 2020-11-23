@@ -4,26 +4,7 @@ pipeline {
         stage("create debian packages") {
             steps {
                 sh 'git clean -fdx .'
-                sh 'mhamakedeb mahalia-release.csv $(cat version) armhf'
-                sh 'mhamakedeb mahalia-development.csv $(cat version) armhf'
-                sh 'mkdir -p output/bionic'
-                sh 'mv *.deb output/bionic'
-                stash name: 'deb', includes: 'output/*/*.deb'
-            }
-        }
-        stage("debian packages for apt") {
-            agent {label "aptly"}
-            steps {
-                // receive all created deb packages from build
-                unstash "deb"
-                archiveArtifacts "output/*/*.deb"
-
-                // Copies the new debs to the stash of existing debs,
-                sh "BRANCH_NAME=master make SUPPLY_DIR=output/ PROJECT=mahalia-dependencies"
-
-                build job:         "/hoertech-aptly/master",
-                      quietPeriod: 300,
-                      wait:        false
+                sh 'mhamakedeb mahalia-dependencies.csv $(cat version) armhf'
             }
         }
     }
