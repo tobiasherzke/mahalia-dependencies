@@ -1,4 +1,5 @@
 Section: admin
 Maintainer: openMHA packaging team <packaging@openmha.org>
-Description: Dependency package for mahalia
-  Depends on all debian packages needed to create a mahalia release image
+Description: Configuration package for Mahalia
+  Depends on all Debian packages needed to create a Mahalia base image.
+  Contains configuration files for the Mahalis system.
