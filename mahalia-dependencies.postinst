@@ -15,6 +15,7 @@ if [ "$1" = 'configure' ]; then
 	# setup permissions
 	chown mha:mha /etc/mahalia
 	chown mha:mha /etc/mahalia/*
+	chown -R mha:mha /etc/nodered
 
 	# setup dnsmasq & hostapd
 	echo "DAEMON_CONF=\"/etc/hostapd/hostapd.conf\"" > /etc/default/hostapd
