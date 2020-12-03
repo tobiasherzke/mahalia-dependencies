@@ -13,8 +13,7 @@ if [ "$1" = 'configure' ]; then
 	cp /usr/share/mahalia-utils/motd /etc/motd
 
 	# setup permissions
-	chown mha:mha /etc/mahalia
-	chown mha:mha /etc/mahalia/*
+	chown -R mha:mha /etc/mahalia
 	chown -R mha:mha /etc/nodered
 
 	# setup dnsmasq & hostapd
