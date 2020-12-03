@@ -7,7 +7,7 @@ sudo chroot /opt/multistrap/ /configure_packages
 sudo chroot /opt/multistrap dpkg -i *.deb
 sudo rm /opt/multistrap/*.deb /opt/multistrap/preseed.conf /opt/multistrap/configure_packages
 
-IMAGE=$PWD/mahalia.img
+IMAGE=$PWD/mahalia_$(cat version).img
 BOOTSIZE=$(( $(sudo du -ms /opt/multistrap/boot/ | cut -f 1) * 3 + 50 ))
 TOTALSIZE=$(( $(sudo du -ms /opt/multistrap/ | cut -f 1) - $(sudo du -ms /opt/multistrap/boot/ | cut -f 1) + $BOOTSIZE + 150))
 # create blank sd card image
