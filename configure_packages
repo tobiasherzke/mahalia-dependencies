@@ -47,14 +47,31 @@ sed -i -e 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/
 # Remove ssh host keys from image
 rm -f /etc/ssh/ssh_host_*
 
-# Recreate ssh host keys on first boot
+# Recreate ssh host keys on first boot, expand file system
 cat << EOF > /etc/rc.local
 #!/bin/sh
+# Recreate ssh host keys
 systemctl stop ssh
 ssh-keygen -f /etc/ssh/ssh_host_rsa_key -t rsa -N ""
 ssh-keygen -f /etc/ssh/ssh_host_dsa_key -t dsa -N ""
 update-rc.d ssh defaults
 systemctl start ssh
+
+# Expand root file system
+fdisk /dev/mmcblk0 <<FDISK
+d
+2
+n
+p
+2
+
+
+n
+w
+FDISK
+resize2fs /dev/mmcblk0p2
+
+# Remove this script after first boot
 rm -f /etc/rc.local
 EOF
 chmod a+x /etc/rc.local
