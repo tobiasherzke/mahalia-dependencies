@@ -1,0 +1,43 @@
+name: Mahalia Image
+
+on:
+  push:
+    branches: ['*']
+    tags: 
+  release:
+    types: ['created']
+
+defaults:
+  run:
+    shell: bash
+
+
+jobs:
+  build:
+    name: Mahalia Image Job
+    runs-on: ubuntu-18.04
+    strategy:
+      fail-fast: false
+    
+    steps:
+    - uses: actions/checkout@v2
+    # Install qemu support for ARM CPUs
+    - name: Prepare to run commands in docker container for ARM CPU
+      run: |
+           uname -a
+           systemctl status binfmt-support || true
+           sudo apt-get -y update
+           sudo apt-get -y install qemu-user-static
+           git clone https://github.com/computermouth/qemu-static-conf.git
+           sudo mkdir -p /lib/binfmt.d
+           sudo cp qemu-static-conf/*.conf /lib/binfmt.d/
+           rm -rf qemu-static-conf
+           sudo systemctl restart systemd-binfmt.service
+           systemctl status binfmt-support
+    - name: Build Image
+      run: ./build_image.sh
+    - name: Upload Image
+      uses: actions/upload-artifact@master
+      with:
+        name: mahalia-image
+        path: image

@@ -46,3 +46,6 @@ sudo umount "/dev/mapper/$DEVICE"p1
 sudo umount "/dev/mapper/$DEVICE"p2
 sudo kpartx -d $IMAGE
 gzip -9 $IMAGE
+mkdir -p image
+mv $IMAGE image
+
