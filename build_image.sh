@@ -1,7 +1,7 @@
 #!/bin/bash -ex
+mhamakedeb mahalia-dependencies.csv $(cat version) all
 sudo rm -rf /opt/multistrap/
 sudo multistrap -f multistrap-base.conf
-mhamakedeb mahalia-dependencies.csv $(cat version) all
 sudo cp preseed.conf configure_packages *.deb /opt/multistrap/
 sudo chroot /opt/multistrap/ /configure_packages
 sudo chroot /opt/multistrap dpkg -i *.deb
