@@ -1,2 +1,3 @@
 #!/bin/sh
 mha --help | grep version
+echo
