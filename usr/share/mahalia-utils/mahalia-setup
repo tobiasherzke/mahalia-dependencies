@@ -13,7 +13,7 @@ source $BASE/functions.sh			# include bash functions
 source $CONF					# include config file
 
 # status message
-echo "setting up soundcard"
+echo "mahalia-setup setting up WIFI SSID"
 
 # read the serial number from eeprom & store for later
 hexdump -e '8/1 "%c"' /sys/bus/i2c/devices/0-0050/eeprom -s 12 -n 16 | tr -d '\n' > /tmp/bb_serial
@@ -23,17 +23,23 @@ SERIAL_NUMBER=`cat /tmp/bb_serial`
 WIFI_SSID=`echo $WIFI_SSID | sed -e "s/\\\$SERIAL_NUMBER/$SERIAL_NUMBER/g"`
 sed -i "s/^ssid=.*$/ssid=$WIFI_SSID/" /etc/hostapd/hostapd.conf
 
+echo "mahalia-setup setting up LED $MAHALIA_LED"
+
 # set permissions of LED
 chmod 777 $MAHALIA_LED/trigger
 
 # turn LED off
 echo none > $MAHALIA_LED/trigger
 
+echo "mahalia-setup setting up IRQ priorities"
+
 # set dma interrupt thread to FIFO priorty 95
 set_irq_priority_ff "edma_ccint" 95
+
+echo "mahalia-setup setting up soundcard"
 
 # restore soundcard settings
 alsactl restore -f $SOUNDCARD_CONF
 
 # status message
-echo "done setting up soundcard"
+echo "mahalia-setup done setting up"
