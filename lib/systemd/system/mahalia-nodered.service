@@ -3,7 +3,6 @@
 Description=Node-RED graphical event wiring tool.
 Wants=network.target
 Documentation=https://nodered.org/docs/
-After=multi-user.target
 
 [Service]
 Type=simple
@@ -16,5 +15,6 @@ ExecStart=/usr/bin/env /opt/node-red/bin/node $NODE_OPTIONS /opt/node-red/lib/no
 KillSignal=SIGINT
 Restart=on-failure
 SyslogIdentifier=Node-RED
+
 [Install]
 WantedBy=multi-user.target
