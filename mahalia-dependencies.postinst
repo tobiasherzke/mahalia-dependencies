@@ -9,8 +9,7 @@ if [ "$1" = 'configure' ]; then
 	usermod -aG sudo $USERNAME
 	usermod -p "${ENCRYPTED_PASSWORD}" $USERNAME
 
-	# configure motd & other system files
-	cp /usr/share/mahalia-utils/motd /etc/motd
+	# configure mahalia system files
 
 	# setup permissions
 	chown -R mha:mha /etc/mahalia
