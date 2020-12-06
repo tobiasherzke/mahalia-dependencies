@@ -10,6 +10,7 @@ if [ "$1" = 'configure' ]; then
 	usermod -p "${ENCRYPTED_PASSWORD}" $USERNAME
 
 	# configure mahalia system files
+        rm -f /etc/motd
 
 	# setup permissions
 	chown -R mha:mha /etc/mahalia
