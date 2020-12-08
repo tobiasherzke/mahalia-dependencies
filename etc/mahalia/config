@@ -20,4 +20,4 @@ OPENMHA_INTERFACE="0.0.0.0"
 OPENMHA_PORT="33337"
 OPENMHA_OPTS="--daemon ?read:/etc/mahalia/generic-hearing-aid/index.cfg"
 
-HEADSET=non-amplified
+HEADSET=amplified # select headset type for which alsa settings will be loaded 
