@@ -1,17 +1,5 @@
 #!/usr/bin/env bash
 
-# set soundcard settings
-#for CARD in C0 C1 C2; do
-	# Set the LOMODE bit to enable differential headphone out, UNMUTE the output and set the gain to 0dB.
-#	amixer sset "$CARD Lineout" on
-#	amixer sset "$CARD Lineout" 0dB
-#	amixer sset "$CARD LO Mode" on
-
-	# Enable Mixer5
-#	amixer sset "$CARD Left LR Playback Mixer Left" 6dB
-#done
-#sleep 5s
-
 # set GPIO 1_17 to output (initally low)
 echo "49" > /sys/class/gpio/export
 echo out > /sys/class/gpio/gpio49/direction
@@ -26,8 +14,8 @@ while true; do
 	if [ "$(cat /sys/class/gpio/gpio115/value)" == "0" ]; then
 		echo "switch is pressed!"
 		echo 1 > /sys/class/gpio/gpio49/value
-		sleep 2s
+		sleep 1s
 		echo 0 > /sys/class/gpio/gpio49/value
-		sleep 2s
 	fi
+	sleep 0.2s 
 done
