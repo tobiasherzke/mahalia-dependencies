@@ -4,6 +4,11 @@
 # this script is run by the service as the user mha
 #
 
+# link mahalia content  according to /boot/mahalia.config
+source /boot/mahalia.config
+ln -s $MAHALIA_CONFIG_PREFIX$mahaliaconfig /etc/mahalia
+
+
 SCRIPT_PATH=$(readlink -f "$0")			# save path to this script
 BASE="/usr/share/mahalia-utils"			# the base folder for the project
 CONF="/etc/mahalia/config"			# the location of the configuration file
