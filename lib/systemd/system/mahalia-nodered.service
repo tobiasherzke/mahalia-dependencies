@@ -9,7 +9,7 @@ Type=simple
 User=root
 Group=root
 Environment="NODE_OPTIONS=--max-old-space-size=128"
-Environment="NODE_RED_OPTIONS=/etc/nodered/openMHAcontrol.flow"
+Environment="NODE_RED_OPTIONS=/etc/mahalia/nodered/openMHAcontrol.flow"
 Environment="NODE_PATH=/opt/node-red/lib/node_modules"
 ExecStart=/usr/bin/env /opt/node-red/bin/node $NODE_OPTIONS /opt/node-red/lib/node_modules/node-red/red.js $NODE_RED_OPTIONS
 KillSignal=SIGINT
