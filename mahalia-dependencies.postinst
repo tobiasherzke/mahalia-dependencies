@@ -13,9 +13,9 @@ if [ "$1" = 'configure' ]; then
         rm -f /etc/motd
 
 	# setup permissions
+	chown -R mha:mha /etc/mahalia_defaults
 	chown -R mha:mha /etc/mahalia_generic-hearing-aid
 	chown -R mha:mha /etc/mahalia_calibration
-	chown -R mha:mha /boot/mahalia.config
 	
 	# setup dnsmasq & hostapd
 	echo "DAEMON_CONF=\"/etc/hostapd/hostapd.conf\"" > /etc/default/hostapd

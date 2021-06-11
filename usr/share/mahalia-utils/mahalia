@@ -4,7 +4,11 @@
 # this script is run by the service as the user mha
 #
 
-# link mahalia content  according to /boot/mahalia.config
+# load default settings for wifi and LED
+CONF_defaults="/etc/mahalia_defaults/config"
+source $CONF_defaults 
+
+# link mahalia content according to /boot/mahalia.config
 source /boot/mahalia.config
 sudo rm /etc/mahalia
 sudo ln -s $MAHALIA_CONFIG_PREFIX$mahaliaconfig /etc/mahalia
@@ -13,6 +17,7 @@ sudo chown -R mha:mha /etc/mahalia
 SCRIPT_PATH=$(readlink -f "$0")			# save path to this script
 BASE="/usr/share/mahalia-utils"			# the base folder for the project
 CONF="/etc/mahalia/config"			# the location of the configuration file
+
 source $BASE/functions.sh			# include bash functions
 source $CONF					# include config file
 
