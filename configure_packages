@@ -60,16 +60,16 @@ systemctl start ssh
 # Expand root file system
 fdisk /dev/mmcblk0 <<FDISK
 d
-2
+3
 n
 p
-2
+3
 
 
 n
 w
 FDISK
-resize2fs /dev/mmcblk0p2
+resize2fs /dev/mmcblk0p3
 
 # Remove this script after first boot
 rm -f /etc/rc.local
