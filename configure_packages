@@ -57,19 +57,19 @@ ssh-keygen -f /etc/ssh/ssh_host_dsa_key -t dsa -N ""
 update-rc.d ssh defaults
 systemctl start ssh
 
-# Expand root file system
-fdisk /dev/mmcblk0 <<FDISK
-d
-3
-n
-p
-3
-
-
-n
-w
-FDISK
-resize2fs /dev/mmcblk0p3
+## Expand root file system
+#fdisk /dev/mmcblk0 <<FDISK
+#d
+#3
+#n
+#p
+#3
+#
+#
+#n
+#w
+#FDISK
+#resize2fs /dev/mmcblk0p3
 
 # Remove this script after first boot
 rm -f /etc/rc.local
