@@ -5,7 +5,7 @@
 #
 
 # link mahalia content according to /boot/mahalia.config
-source /boot/mahalia.config
+source /configuration/mahalia.config
 sudo rm /etc/mahalia
 sudo ln -s $MAHALIA_CONFIG_PREFIX$mahaliaconfig /etc/mahalia
 sudo chown -R mha:mha /etc/mahalia
