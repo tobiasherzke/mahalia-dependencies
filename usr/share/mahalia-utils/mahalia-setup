@@ -7,8 +7,8 @@
 # initial configuration
 SCRIPT_PATH=$(readlink -f "$0")			# save path to this script
 BASE="/usr/share/mahalia-utils"			# the base folder for the project
-CONF="/etc/mahalia/config"			# the location of the configuration file
-SOUNDCARD_CONF="/etc/mahalia/cape4all.alsactl.state" # the location of the soundcard configuration file
+CONF="/etc/mahalia_setup/config"			# the location of the configuration file
+SOUNDCARD_CONF="/etc/mahalia_setup/cape4all.alsactl.state" # the location of the soundcard configuration file
 source $BASE/functions.sh			# include bash functions
 source $CONF					# include config file
 

@@ -4,10 +4,6 @@
 # this script is run by the service as the user mha
 #
 
-# load default settings for wifi and LED
-CONF_defaults="/etc/mahalia_defaults/config"
-source $CONF_defaults 
-
 # link mahalia content according to /boot/mahalia.config
 source /boot/mahalia.config
 sudo rm /etc/mahalia
