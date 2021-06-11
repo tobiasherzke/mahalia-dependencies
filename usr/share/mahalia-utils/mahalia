@@ -6,7 +6,8 @@
 
 # link mahalia content  according to /boot/mahalia.config
 source /boot/mahalia.config
-ln -s $MAHALIA_CONFIG_PREFIX$mahaliaconfig /etc/mahalia
+sudo rm /etc/mahalia
+sudo ln -s $MAHALIA_CONFIG_PREFIX$mahaliaconfig /etc/mahalia
 
 
 SCRIPT_PATH=$(readlink -f "$0")			# save path to this script
