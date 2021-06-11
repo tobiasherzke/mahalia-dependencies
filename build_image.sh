@@ -9,7 +9,7 @@ sudo rm /opt/multistrap/*.deb /opt/multistrap/preseed.conf /opt/multistrap/confi
 
 IMAGE=$PWD/mahalia_$(cat version).img
 BOOTSIZE=$(( $(sudo du -ms /opt/multistrap/boot/ | cut -f 1) * 3 + 50 ))
-TOTALSIZE=$(( $(sudo du -ms /opt/multistrap/ | cut -f 1) - $(sudo du -ms /opt/multistrap/boot/ | cut -f 1) + $BOOTSIZE + 150))
+TOTALSIZE=$(( $(sudo du -ms /opt/multistrap/ | cut -f 1) - $(sudo du -ms /opt/multistrap/boot/ | cut -f 1) + $BOOTSIZE + 1200))
 # create blank sd card image
 sudo dd if=/dev/zero of=$IMAGE bs=1M count=$TOTALSIZE
 
