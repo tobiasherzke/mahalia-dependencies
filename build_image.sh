@@ -27,6 +27,14 @@ n
 p
 2
 
++1G
+t
+2
+c
+n
+p
+3
+
 
 w
 EOF
@@ -34,9 +42,12 @@ EOF
 # Mount and format partitions
 DEVICE=`sudo kpartx -a -v $IMAGE | sed -E 's/.*(loop[0-9]*)p.*/\1/g' | head -1`
 sudo mkfs.vfat "/dev/mapper/$DEVICE"p1
-sudo mkfs.ext4 "/dev/mapper/$DEVICE"p2
+sudo mkfs.vfat "/dev/mapper/$DEVICE"p2
+sudo mkfs.ext4 "/dev/mapper/$DEVICE"p3
 sudo mkdir -p /mahalia
-sudo mount "/dev/mapper/$DEVICE"p2 /mahalia
+sudo mount "/dev/mapper/$DEVICE"p3 /mahalia
+sudo mkdir -p /mahalia/configuration
+sudo mount "/dev/mapper/$DEVICE"p2 /mahalia/configuration
 sudo mkdir -p /mahalia/boot
 sudo mount "/dev/mapper/$DEVICE"p1 /mahalia/boot
 
@@ -44,6 +55,7 @@ sudo mount "/dev/mapper/$DEVICE"p1 /mahalia/boot
 sudo rsync -a /opt/multistrap/ /mahalia/ || true
 sudo umount "/dev/mapper/$DEVICE"p1
 sudo umount "/dev/mapper/$DEVICE"p2
+sudo umount "/dev/mapper/$DEVICE"p3
 sudo kpartx -d $IMAGE
 gzip -9 $IMAGE
 mkdir -p image
