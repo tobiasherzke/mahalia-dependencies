@@ -9,7 +9,7 @@ sudo rm /opt/multistrap/*.deb /opt/multistrap/preseed.conf /opt/multistrap/confi
 
 IMAGE=$PWD/mahalia_$(cat version).img
 BOOTSIZE=$(( $(sudo du -ms /opt/multistrap/boot/ | cut -f 1) * 3 + 50 ))
-TOTALSIZE=$(( $(sudo du -ms /opt/multistrap/ | cut -f 1) - $(sudo du -ms /opt/multistrap/boot/ | cut -f 1) + $BOOTSIZE + 150))
+TOTALSIZE=$(( $(sudo du -ms /opt/multistrap/ | cut -f 1) - $(sudo du -ms /opt/multistrap/boot/ | cut -f 1) + $BOOTSIZE + 1200))
 # create blank sd card image
 sudo dd if=/dev/zero of=$IMAGE bs=1M count=$TOTALSIZE
 
@@ -25,6 +25,14 @@ c
 a
 n
 p
+3
+
++1G
+t
+3
+c
+n
+p
 2
 
 
@@ -35,14 +43,18 @@ EOF
 DEVICE=`sudo kpartx -a -v $IMAGE | sed -E 's/.*(loop[0-9]*)p.*/\1/g' | head -1`
 sudo mkfs.vfat "/dev/mapper/$DEVICE"p1
 sudo mkfs.ext4 "/dev/mapper/$DEVICE"p2
+sudo mkfs.vfat "/dev/mapper/$DEVICE"p3
 sudo mkdir -p /mahalia
 sudo mount "/dev/mapper/$DEVICE"p2 /mahalia
 sudo mkdir -p /mahalia/boot
 sudo mount "/dev/mapper/$DEVICE"p1 /mahalia/boot
+sudo mkdir -p /mahalia/configuration
+sudo mount "/dev/mapper/$DEVICE"p3 /mahalia/configuration
 
 # Copy content and unmount 
 sudo rsync -a /opt/multistrap/ /mahalia/ || true
 sudo umount "/dev/mapper/$DEVICE"p1
+sudo umount "/dev/mapper/$DEVICE"p3
 sudo umount "/dev/mapper/$DEVICE"p2
 sudo kpartx -d $IMAGE
 gzip -9 $IMAGE
