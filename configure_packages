@@ -63,13 +63,13 @@ d
 2
 n
 p
-3
+2
 
 
 n
 w
 FDISK
-resize2fs /dev/mmcblk0p3
+resize2fs /dev/mmcblk0p2
 
 # Remove this script after first boot
 rm -f /etc/rc.local
