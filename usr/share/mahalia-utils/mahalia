@@ -4,11 +4,27 @@
 # this script is run by the service as the user mha
 #
 
-# link mahalia content according to /boot/mahalia.config
+# link mahalia content according to /configuration/mahalia.config
 source /configuration/mahalia.config
-sudo rm /etc/mahalia
-sudo ln -s $MAHALIA_CONFIG_PREFIX$mahaliaconfig /etc/mahalia
-sudo chown -R mha:mha /etc/mahalia
+if [ "x$MAHALIA_CONFIG_PREFIX$mahaliaconfig" == "x" ]; then
+    if [ ! -d "/configurations/generic_hearing_aid" ]; then
+        echo "[mahalia] Could not find default configuration"
+        exit 1
+    fi
+    echo "[mahalia] Using default calibration"
+    sudo rm /etc/mahalia
+    sudo ln -s /configuration/generic-hearing-aid /etc/mahalia
+    sudo chown -R mha:mha /etc/mahalia
+else
+    if [ ! -d "$MAHALIA_CONFIG_PREFIX$mahaliaconfig" ]; then
+        echo "[mahalia] Could not find $mahaliaconfig configuration"
+        exit 1
+    fi
+    echo "[mahalia] Using $mahaliaconfig configuration"
+    sudo rm /etc/mahalia
+    sudo ln -s $MAHALIA_CONFIG_PREFIX$mahaliaconfig /etc/mahalia
+    sudo chown -R mha:mha /etc/mahalia
+fi
 
 SCRIPT_PATH=$(readlink -f "$0")			# save path to this script
 BASE="/usr/share/mahalia-utils"			# the base folder for the project
@@ -86,7 +102,9 @@ elif [ "$1" == "stop" ]; then
   #Reset to default
   rm /etc/mahalia/calibration
   ln -s /etc/mahalia/headsets/amplified /etc/mahalia/calibration
-
+  sudo rm /etc/mahalia
+  sudo ln -s /configurations/generic_hearing_aid /etc/mahalia
+  sudo chown -R mha:mha /etc/mahalia
 	exit 0
 
 elif [ "$1" == "reload" ]; then
