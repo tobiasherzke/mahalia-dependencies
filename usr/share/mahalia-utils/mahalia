@@ -6,14 +6,14 @@
 
 # link mahalia content according to /configuration/mahalia.config
 source /configuration/mahalia.config
-if [ "x$MAHALIA_CONFIG_PREFIX$mahaliaconfig" == "x" ]; then
-    if [ ! -d "/configurations/generic_hearing_aid" ]; then
+if [ "x$MAHALIA_CONFIG_PREFIX" == "x" ] || [ "x$mahaliaconfig" == "x" ]; then
+    if [ ! -d "/etc/mahalia_generic_hearing_aid" ]; then
         echo "[mahalia] Could not find default configuration"
         exit 1
     fi
     echo "[mahalia] Using default calibration"
     sudo rm /etc/mahalia
-    sudo ln -s /configuration/generic-hearing-aid /etc/mahalia
+    sudo ln -s /etc/mahalia_generic-hearing-aid /etc/mahalia
     sudo chown -R mha:mha /etc/mahalia
 else
     if [ ! -d "$MAHALIA_CONFIG_PREFIX$mahaliaconfig" ]; then
