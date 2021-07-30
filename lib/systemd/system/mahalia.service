@@ -12,6 +12,7 @@ ExecStop=/usr/share/mahalia-utils/mahalia stop
 ExecReload=/usr/share/mahalia-utils/mahalia reload
 StandardOutput=journal
 Restart=always
+SuccessExitStatus=143
 
 [Install]
 WantedBy=multi-user.target
