@@ -4,36 +4,56 @@
 # this script is run by the service as the user mha
 #
 
-# link mahalia content according to /configuration/mahalia.config
+SCRIPT_PATH=$(readlink -f "$0")			# save path to this script
+BASE="/usr/share/mahalia-utils"			# the base folder for the project
+SETUP="/etc/mahalia_setup/config"               # the location of the configuration file
+
+# Set defaults
+MAHALIA_DEFAULT_CONFIG="/etc/mahalia_generic-hearing-aid_calibration"
+MAHALIA_DEFAULT_CALIB="amplified"
+
+source $BASE/functions.sh			# include bash functions
+source $SETUP                                   # include setup file
+
+# Read configuration 
 source /configuration/mahalia.config
+
+
 if [ "x$MAHALIA_CONFIG_PREFIX" == "x" ] || [ "x$mahaliaconfig" == "x" ]; then
-    if [ ! -d "/etc/mahalia_generic_hearing_aid" ]; then
+    if [ ! -d $MAHALIA_DEFAULT_CONFIG ]; then
         echo "[mahalia] Could not find default configuration"
         exit 1
     fi
-    echo "[mahalia] Using default calibration"
-    sudo rm /etc/mahalia
-    sudo ln -s /etc/mahalia_generic-hearing-aid /etc/mahalia
-    sudo chown -R mha:mha /etc/mahalia
-else
+    echo "[mahalia] Using default configuration: $MAHALIA_DEFAULT_CONFIG"
+    MAHALIA_CUR_CONFIG=$MAHALIA_DEFAULT_CONFIG
+  else
     if [ ! -d "$MAHALIA_CONFIG_PREFIX$mahaliaconfig" ]; then
         echo "[mahalia] Could not find $mahaliaconfig configuration"
         exit 1
     fi
     echo "[mahalia] Using $mahaliaconfig configuration"
-    sudo rm /etc/mahalia
-    sudo ln -s $MAHALIA_CONFIG_PREFIX$mahaliaconfig /etc/mahalia
-    sudo chown -R mha:mha /etc/mahalia
+    MAHALIA_CUR_CONFIG=$MAHALIA_CONFIG_PREFIX$mahaliaconfig
 fi
 
-SCRIPT_PATH=$(readlink -f "$0")			# save path to this script
-BASE="/usr/share/mahalia-utils"			# the base folder for the project
-SETUP="/etc/mahalia_setup/config"               # the location of the configuration file
-CONF="/etc/mahalia/config"			# the location of the configuration file
+source $MAHALIA_CUR_CONFIG/config
 
-source $BASE/functions.sh			# include bash functions
-source $SETUP                                   # include setup file
-source $CONF					# include config file
+if [ "x$HEADSET" == "x" ]; then
+    if [ ! -d "$MAHALIA_CUR_CONFIG/headsets/$MAHALIA_DEFAULT_CALIB" ]; then
+        echo "[mahalia] Could not find default calibration"
+        exit 1
+    fi
+    echo "[mahalia] Using default headset calibration: $MAHALIA_DEFAULT_CALIB"
+    MAHALIA_CUR_CALIB="/etc/mahalia/headsets/$MAHALIA_DEFAULT_CALIB"
+else
+    if [ ! -d "$MAHALIA_CUR_CONFIG/headsets/$HEADSET" ]; then
+        echo "[mahalia] Could not find $HEADSET calibration"
+        exit 1
+    fi
+    echo "[mahalia] Using $HEADSET calibration"
+    MAHALIA_CUR_CALIB="/etc/mahalia/headsets/$HEADSET"
+fi
+
+
 
 if [ "$1" == "start" ]; then
 	echo "[mahalia] Starting"
@@ -48,27 +68,17 @@ if [ "$1" == "start" ]; then
   fi
 	sleep 5
 
+  # link mahalia content according to /configuration/mahalia.config
+  sudo rm /etc/mahalia
+  sudo ln -s $MAHALIA_CUR_CONFIG /etc/mahalia
+  sudo chown -R mha:mha /etc/mahalia
+	
   #Link in headset calibration
-  if [ "x$HEADSET" == "x" ]; then
-      if [ ! -d "/etc/mahalia/headsets/amplified" ]; then
-          echo "[mahalia] Could not find default calibration"
-          exit 1
-      fi
-      echo "[mahalia] Using default calibration"
-      rm /etc/mahalia/calibration
-      ln -s /etc/mahalia/headsets/amplified /etc/mahalia/calibration
-  else
-      if [ ! -d "/etc/mahalia/headsets/$HEADSET" ]; then
-          echo "[mahalia] Could not find $HEADSET calibration"
-          exit 1
-      fi
-      echo "[mahalia] Using $HEADSET calibration"
-      rm /etc/mahalia/calibration
-      ln -s /etc/mahalia/headsets/$HEADSET /etc/mahalia/calibration
-  fi
+  rm /etc/mahalia/calibration
+  ln -s  $MAHALIA_CUR_CALIB /etc/mahalia/calibration
 
-	# Set codec registers
-	/etc/mahalia/calibration/RegSet.sh
+  # Set codec registers
+  /etc/mahalia/calibration/RegSet.sh
 
   if [ "x$NOJACK" == "x" ]; then
 	# start jack audio server
@@ -85,7 +95,7 @@ if [ "$1" == "start" ]; then
 	mha --interface=$OPENMHA_INTERFACE --port=$OPENMHA_PORT $OPENMHA_OPTS
 
 	# restart script
-	exec "$SCRIPT_PATH"
+#	exec "$SCRIPT_PATH"
 
 elif [ "$1" == "stop" ]; then
 	echo "[mahalia] Stopping"
@@ -98,14 +108,14 @@ elif [ "$1" == "stop" ]; then
   if [ "x$NOJACK" != "x" ]; then
 	    killall -s SIGTERM jackd
   fi
-
-  #Reset to default
+ 
+  # Reset links 
   rm /etc/mahalia/calibration
-  ln -s /etc/mahalia/headsets/amplified /etc/mahalia/calibration
   sudo rm /etc/mahalia
-  sudo ln -s /configurations/generic_hearing_aid /etc/mahalia
+  sudo ln -s $MAHALIA_CUR_CONFIG /etc/mahalia
   sudo chown -R mha:mha /etc/mahalia
-	exit 0
+  ln -s  $MAHALIA_CUR_CALIB /etc/mahalia/calibration
+  exit 0
 
 elif [ "$1" == "reload" ]; then
 	echo "[mahalia] Reloading"
