@@ -36,11 +36,6 @@ jobs:
            rm -rf qemu-static-conf
            sudo systemctl restart systemd-binfmt.service
            systemctl status binfmt-support
-    - name: Upload mahalia-dependencies debian package
-      uses: actions/upload-artifact@master
-      with:
-        name: mahalia-dependencies.deb
-        path: *.deb
     - name: Build Image
       run: ./build_image.sh
     - name: Upload Image
