@@ -12,9 +12,10 @@ if [ "$1" = 'configure' ]; then
 	# configure mahalia system files
         rm -f /etc/motd
 
-	# setup permissions
+	# setup permissions for seups that are available with the image
 	chown -R mha:mha /etc/mahalia_generic-hearing-aid
 	chown -R mha:mha /etc/mahalia_calibration
+	chown -R mha:mha /etc/mahalia_generic-hearing-aid_calibration
 	
 	# setup dnsmasq & hostapd
 	echo "DAEMON_CONF=\"/etc/hostapd/hostapd.conf\"" > /etc/default/hostapd
