@@ -27,7 +27,7 @@ jobs:
            uname -a
            systemctl status binfmt-support || true
            wget -qO- https://apt.hoertech.de/openmha-packaging.pub | sudo apt-key add -
-           sudo apt-add-repository 'deb [arch=amd64] http://apt.hoertech.de bionic universe'
+           sudo apt-add-repository 'deb [arch=amd64] http://apt.hoertech.de focal universe'
            sudo apt-get -y update
            sudo apt-get -y install qemu-user-static multistrap mhamakedeb kpartx
            git clone https://github.com/computermouth/qemu-static-conf.git
