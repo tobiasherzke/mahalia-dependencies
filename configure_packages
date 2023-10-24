@@ -34,7 +34,7 @@ umount /proc
 # Adjust existing configuration
 #################################################
 
-# Replace file /etc/hosts
+# Replace file /etc/hosts.
 echo "127.0.0.1	localhost $HOSTNAME" >/etc/hosts
 
 # Set root password
