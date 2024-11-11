@@ -16,6 +16,7 @@ if [ "$1" = 'configure' ]; then
 	chown -R mha:mha /etc/mahalia_generic-hearing-aid
 	chown -R mha:mha /etc/mahalia_calibration
 	chown -R mha:mha /etc/mahalia_generic-hearing-aid_calibration
+	chown -R mha:mha /etc/mahalia_fitpod
 	
 	# setup dnsmasq & hostapd
 	echo "DAEMON_CONF=\"/etc/hostapd/hostapd.conf\"" > /etc/default/hostapd
